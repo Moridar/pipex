@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:38:30 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/08 16:37:55 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/11 08:05:20 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	exec(int i, char *argv[], int fd[], char *envp[])
 {
 	pid_t	pid;
 	char	*args[] = {"cat", NULL};
-
+	
 	pid = fork();
 	if (pid == -1)
 		errorexit("fork");
@@ -42,7 +42,7 @@ int	exec(int i, char *argv[], int fd[], char *envp[])
 		exit(EXIT_SUCCESS);
 	}
 	if (i == 2 || i == 3)
-		close(fd[i-2]);
+		close(fd[i - 2]);
 	return (pid);
 }
 
