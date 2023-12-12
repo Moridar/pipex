@@ -7,28 +7,36 @@ NAME = pipex
 
 LIB = libft/libft.a
 LIBDIR = ./libft
-SRC = pipex.c
-SRC_BONUS = pipex_bonus.c
+SRC = pipex.c pipex_ulti.c
+SRC_BONUS = pipex_bonus.c pipex_ulti.c
 OBJ = $(SRC:%.c=%.o)
 OBJ_BONUS = $(SRC_BONUS:%.c=%.o)
+BONUS = .bonus
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-$(NAME): all
-	
-.phony: all
-all: $(OBJ)
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -L$(LIBDIR) -lft -o $(NAME)
 
-bonus: $(OBJ_BONUS)
+.phony: all
+all: $(NAME)
+
+bonus: $(BONUS)
+	
+
+$(BONUS): $(OBJ_BONUS)
+	$(CC) $(CFLAGS) $(OBJ_BONUS) -L$(LIBDIR) -lft -o $(NAME)
+	@touch .bonus
 
 %.o: %.c $(LIB)
 	$(CC) $(CFLAGS) $< -c
-	$(CC) $(CFLAGS) $@ -L$(LIBDIR) -lft -o $(NAME)
+	
 
 $(LIB):
 	make -C $(LIBDIR)
 
 clean:
+	rm -f .bonus
 	rm -rf *.o
 	make -C $(LIBDIR) clean
 

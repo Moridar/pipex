@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 10:33:37 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/11 10:34:19 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/12 12:27:13 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,53 @@ void	errorexit(char *errormsg)
 {
 	perror(errormsg);
 	exit(EXIT_FAILURE);
+}
+
+char	**make_args(char *arg)
+{
+	char	**args;
+	int		i;
+	char	*strend;
+	char	c;
+
+	args = ft_split(arg, ' ');
+	c = 0;
+	if (args[1] && (*args[1] == '\'' || *args[1] == '"'))
+		c = *args[1];
+	if (c)
+	{
+		free(args[1]);
+		args[1] = ft_strchr(arg, c) + 1;
+		strend = ft_strchr(args[1], c);
+		*strend = 0;
+		i = 2;
+		while (args[i])
+			free(args[i++]);
+		args[2] = 0;
+	}
+	return (args);
+}
+
+char	*ft_getpath(char *cmd, char **paths)
+{
+	int		i;
+	char	*cmdpath;
+
+	cmdpath = cmd;
+	cmd = ft_strjoin("/", cmd);
+	free(cmdpath);
+	i = -1;
+	while (paths[++i])
+	{
+		cmdpath = ft_strjoin(paths[i], cmd);
+		if (access(cmdpath, F_OK) == 0)
+			break ;
+		free(cmdpath);
+		cmdpath = NULL;
+	}
+	free(cmd);
+	freeall(paths);
+	if (!cmdpath)
+		exit(1);
+	return (cmdpath);
 }
