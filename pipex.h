@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 13:59:48 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/12 14:13:28 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:41:40 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 typedef struct s_pipe
 {
+	int		status;
 	int		fd[2];
 	pid_t	pid[2];
 	int		argc;

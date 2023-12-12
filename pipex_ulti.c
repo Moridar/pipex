@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 10:33:37 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/12 15:15:38 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:38:16 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	*ft_getpath(char *cmd, char **paths)
 		cmdpath = NULL;
 	}
 	free(cmd);
-	freeall(paths);
+	free(paths);
 	if (!cmdpath)
 		exit(1);
 	return (cmdpath);

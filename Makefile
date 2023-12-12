@@ -21,7 +21,7 @@ $(NAME): $(OBJ)
 .phony: all
 all: $(NAME)
 
-bonus: $(BONUS)
+abonus: $(BONUS)
 	
 
 $(BONUS): $(OBJ_BONUS)

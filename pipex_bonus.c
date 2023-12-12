@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:38:30 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/12 15:06:58 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:40:32 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ int	main(int argc, char *argv[], char *envp[])
 	t_pipe	data;
 	int		i;
 
+	if (argc < 5)
+		return (printf("Usage: %s infile cmd1 cmd2 (cmd3) outfile", argv[0]));
 	data.argv = argv;
 	data.argc = argc;
 	data.envp = envp;
@@ -108,11 +110,10 @@ int	main(int argc, char *argv[], char *envp[])
 		envp++;
 	data.paths = ft_split((*envp) + 5, ':');
 	data.pid = malloc(sizeof(pid_t) * (argc - 3));
-	if (argc < 5)
-		return (printf("Usage: %s infile cmd1 cmd2 (cmd3) outfile", argv[0]));
 	i = 1;
 	while (++i < argc - 1)
 		execute(i, &data);
 	free(data.pid);
+	free(data.paths);
 	return (WEXITSTATUS(data.status));
 }

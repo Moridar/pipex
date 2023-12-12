@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:38:30 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/12 15:04:36 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:45:31 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ static void	exec(int i, t_pipe *data, int fd[])
 	}
 	close(fd[i - 2]);
 	data->pid[i - 2] = pid;
-	if (i == 2)
-		waitpid(pid, NULL, 0);
 }
 
 static void	fileexec(int i, t_pipe *data, int last)
@@ -68,22 +66,26 @@ static void	fileexec(int i, t_pipe *data, int last)
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_pipe	data;
-	int		status;
 
+	if (argc != 5)
+		return (printf("Usage: %s file1 cmd1 cmd1 file2", argv[0]));
 	data.argv = argv;
 	data.argc = argc;
 	data.envp = envp;
+	data.status = 0;
+	data.pid[0] = 0;
 	while (*envp && ft_strncmp(*envp, "PATH=", 5))
 		envp++;
 	data.paths = ft_split((*envp) + 5, ':');
-	if (argc != 5)
-		return (printf("Usage: %s file1 cmd1 cmd1 file2", argv[0]));
 	if (pipe(data.fd) == -1)
 		errorexit("pipe");
 	fileexec(2, &data, 0);
 	fileexec(3, &data, 1);
 	close(data.fd[1]);
 	close(data.fd[0]);
-	waitpid(data.pid[1], &status, 0);
-	exit(WEXITSTATUS(status));
+	free(data.paths);
+	if (data.pid[0])
+		waitpid(data.pid[0], &data.status, 0);
+	waitpid(data.pid[1], &data.status, 0);
+	return (WEXITSTATUS(data.status));
 }
