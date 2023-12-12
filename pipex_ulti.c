@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 10:33:37 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/12 12:27:13 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:15:38 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	freeall(char **strarray)
 void	errorexit(char *errormsg)
 {
 	perror(errormsg);
-	exit(EXIT_FAILURE);
+	exit(errno);
 }
 
 char	**make_args(char *arg)
@@ -36,6 +36,8 @@ char	**make_args(char *arg)
 	char	c;
 
 	args = ft_split(arg, ' ');
+	if (!args)
+		exit(1);
 	c = 0;
 	if (args[1] && (*args[1] == '\'' || *args[1] == '"'))
 		c = *args[1];
@@ -58,6 +60,8 @@ char	*ft_getpath(char *cmd, char **paths)
 	int		i;
 	char	*cmdpath;
 
+	if (access(cmd, F_OK) == 0)
+		return (cmd);
 	cmdpath = cmd;
 	cmd = ft_strjoin("/", cmd);
 	free(cmdpath);

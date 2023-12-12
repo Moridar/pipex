@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:38:30 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/12 12:27:49 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:04:36 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,19 @@ static void	exec(int i, t_pipe *data, int fd[])
 	if (pid == 0)
 	{
 		args = make_args(data->argv[i]);
-		if (args)
-			path = ft_getpath(args[0], data->paths);
-		if (i == 2 || i == 3)
-			close(fd[2]);
+		path = ft_getpath(args[0], data->paths);
+		close(fd[2]);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
 		execve(path, args, data->envp);
-		printf("execve fails");
 		exit(EXIT_FAILURE);
 	}
+	close(fd[i - 2]);
 	data->pid[i - 2] = pid;
-	if (i == 2 || i == 3)
-		close(fd[i - 2]);
+	if (i == 2)
+		waitpid(pid, NULL, 0);
 }
 
 static void	fileexec(int i, t_pipe *data, int last)
@@ -59,7 +57,7 @@ static void	fileexec(int i, t_pipe *data, int last)
 	{
 		file = open(data->argv[i - 1], O_RDONLY);
 		if (file < 0)
-			errorexit("infile error");
+			return (perror("infile error"));
 		newfd[0] = file;
 		newfd[1] = data->fd[1];
 		newfd[2] = data->fd[0];
@@ -70,6 +68,7 @@ static void	fileexec(int i, t_pipe *data, int last)
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_pipe	data;
+	int		status;
 
 	data.argv = argv;
 	data.argc = argc;
@@ -85,7 +84,6 @@ int	main(int argc, char *argv[], char *envp[])
 	fileexec(3, &data, 1);
 	close(data.fd[1]);
 	close(data.fd[0]);
-	waitpid(data.pid[0], NULL, 0);
-	waitpid(data.pid[1], NULL, 0);
-	return (0);
+	waitpid(data.pid[1], &status, 0);
+	exit(WEXITSTATUS(status));
 }

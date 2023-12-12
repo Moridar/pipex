@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:38:30 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/12 12:27:56 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/12 15:06:58 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ static void	exec(int i, t_pipe *data, int fd[])
 	if (pid == 0)
 	{
 		args = make_args(data->argv[i]);
-		if (args)
-			path = ft_getpath(args[0], data->paths);
+		path = ft_getpath(args[0], data->paths);
 		if (i == 2 || data->argc - i == 2)
 			close(fd[2]);
 		dup2(fd[0], STDIN_FILENO);
@@ -59,7 +58,7 @@ static void	fileexec(int i, t_pipe *data, int last)
 	{
 		file = open(data->argv[i - 1], O_RDONLY);
 		if (file < 0)
-			errorexit("infile error");
+			return (perror("infile error"));
 		newfd[0] = file;
 		newfd[1] = data->fd[0][1];
 		newfd[2] = data->fd[0][0];
@@ -71,14 +70,18 @@ static void	fileexec(int i, t_pipe *data, int last)
 static void	execute(int i, t_pipe *data)
 {
 	if (i == 2)
+	{
+		if (pipe(data->fd[0]) == -1)
+			errorexit("pipe");
 		fileexec(i, data, 0);
+	}
 	else if (i == data->argc - 2)
 	{
 		fileexec(i, data, 1);
 		close(data->fd[(i + 1) % 2][1]);
 		close(data->fd[(i + 1) % 2][0]);
-		waitpid(data->pid[i - 3], NULL, 0);
-		waitpid(data->pid[i - 2], NULL, 0);
+		waitpid(data->pid[i - 3], &data->status, 0);
+		waitpid(data->pid[i - 2], &data->status, 0);
 	}
 	else
 	{
@@ -88,7 +91,7 @@ static void	execute(int i, t_pipe *data)
 		data->fd[(i + 1) % 2][1] = data->fd[i % 2][1];
 		exec(i, data, data->fd[(i + 1) % 2]);
 		close(data->fd[(i + 1) % 2][0]);
-		waitpid(data->pid[i - 3], NULL, 0);
+		waitpid(data->pid[i - 3], &data->status, 0);
 	}
 }
 
@@ -100,17 +103,16 @@ int	main(int argc, char *argv[], char *envp[])
 	data.argv = argv;
 	data.argc = argc;
 	data.envp = envp;
+	data.status = 0;
 	while (*envp && ft_strncmp(*envp, "PATH=", 5))
 		envp++;
 	data.paths = ft_split((*envp) + 5, ':');
 	data.pid = malloc(sizeof(pid_t) * (argc - 3));
 	if (argc < 5)
 		return (printf("Usage: %s infile cmd1 cmd2 (cmd3) outfile", argv[0]));
-	if (pipe(data.fd[0]) == -1)
-		errorexit("pipe");
 	i = 1;
 	while (++i < argc - 1)
 		execute(i, &data);
 	free(data.pid);
-	return (0);
+	return (WEXITSTATUS(data.status));
 }

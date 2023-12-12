@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 13:59:48 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/12 12:27:22 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/12 14:13:28 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 # include "libft/libft.h"
 # include <stdio.h>
 # include <fcntl.h>
+# include <errno.h>
+# include <string.h>
 
 typedef struct s_pipe
 {
