@@ -7,8 +7,8 @@ NAME = pipex
 
 LIB = libft/libft.a
 LIBDIR = ./libft
-SRC = pipex.c pipex_ulti.c
-SRC_BONUS = pipex_bonus.c pipex_ulti.c
+SRC = pipex.c pipex_utils.c
+SRC_BONUS = pipex_bonus.c pipex_utils.c
 OBJ = $(SRC:%.c=%.o)
 OBJ_BONUS = $(SRC_BONUS:%.c=%.o)
 BONUS = .bonus
