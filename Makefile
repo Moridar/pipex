@@ -41,8 +41,8 @@ clean:
 	make -C $(LIBDIR) clean
 
 fclean: clean
-	rm $(NAME)
-	rm $(LIB)
+	rm -f $(NAME)
+	rm -f $(LIB)
 	
 re: fclean all
 

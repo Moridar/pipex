@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_ulti.c                                       :+:      :+:    :+:   */
+/*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 10:33:37 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/12 16:28:21 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/13 13:16:18 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*ft_getpath(char *cmd, char **paths)
 	if (!cmdpath)
 	{
 		write(2, "command not found\n", 18);
-		exit(1);
+		exit(127);
 	}
 	return (cmdpath);
 }

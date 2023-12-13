@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:38:30 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/12 15:51:14 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/13 13:17:28 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	exec(int i, t_pipe *data, int fd[])
 	if (pid == 0)
 	{
 		args = make_args(data->argv[i]);
-		path = ft_getpath(args[0], data->paths);
+		path = ft_getpath(ft_strdup(args[0]), data->paths);
 		if (i == 2 || data->argc - i == 2)
 			close(fd[2]);
 		dup2(fd[0], STDIN_FILENO);
