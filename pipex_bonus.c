@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:38:30 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/13 13:17:28 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/13 16:40:24 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,11 @@ int	main(int argc, char *argv[], char *envp[])
 	while (*envp && ft_strncmp(*envp, "PATH=", 5))
 		envp++;
 	data.paths = ft_split((*envp) + 5, ':');
-	data.pid = malloc(sizeof(pid_t) * (argc - 3));
+	data.pid = ft_calloc(sizeof(pid_t), (argc - 3));
 	i = 1;
 	while (++i < argc - 1)
 		execute(i, &data);
 	free(data.pid);
-	free(data.paths);
+	freeall(data.paths);
 	return (WEXITSTATUS(data.status));
 }

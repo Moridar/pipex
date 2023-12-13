@@ -22,7 +22,6 @@ $(NAME): $(OBJ)
 all: $(NAME)
 
 bonus: $(BONUS)
-	
 
 $(BONUS): $(OBJ_BONUS)
 	$(CC) $(CFLAGS) $(OBJ_BONUS) -L$(LIBDIR) -lft -o $(NAME)

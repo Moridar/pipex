@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:38:30 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/13 13:17:20 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2023/12/13 15:32:27 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	main(int argc, char *argv[], char *envp[])
 	fileexec(3, &data, 1);
 	close(data.fd[1]);
 	close(data.fd[0]);
-	free(data.paths);
+	freeall(data.paths);
 	if (data.pid[0])
 		waitpid(data.pid[0], &data.status, 0);
 	waitpid(data.pid[1], &data.status, 0);
