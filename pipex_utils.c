@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 10:33:37 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/13 13:16:18 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2024/01/11 14:48:32 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,13 @@ void	freeall(char **strarray)
 	free(strarray);
 }
 
-void	errorexit(char *errormsg)
+void	errormsg(char *msg, int exits)
 {
-	perror(errormsg);
-	exit(errno);
+	msg = ft_strjoin("pipex: ", msg);
+	perror(msg);
+	free(msg);
+	if (exits)
+		exit(errno);
 }
 
 char	**make_args(char *arg)
@@ -55,6 +58,16 @@ char	**make_args(char *arg)
 	return (args);
 }
 
+static void	cmdnfound_exit(char *cmd)
+{
+	char	*errmsg;
+
+	errmsg = ft_strjoin("pipex: ", cmd);
+	errmsg = ft_strjoin(errmsg, ": command not found\n");
+	write(2, errmsg, ft_strlen(errmsg));
+	exit(127);
+}
+
 char	*ft_getpath(char *cmd, char **paths)
 {
 	int		i;
@@ -62,6 +75,8 @@ char	*ft_getpath(char *cmd, char **paths)
 
 	if (access(cmd, F_OK) == 0)
 		return (cmd);
+	if (!paths)
+		paths = ft_split("/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin", ':');
 	cmdpath = cmd;
 	cmd = ft_strjoin("/", cmd);
 	free(cmdpath);
@@ -74,12 +89,9 @@ char	*ft_getpath(char *cmd, char **paths)
 		free(cmdpath);
 		cmdpath = NULL;
 	}
-	free(cmd);
 	free(paths);
 	if (!cmdpath)
-	{
-		write(2, "command not found\n", 18);
-		exit(127);
-	}
+		cmdnfound_exit(cmd + 1);
+	free(cmd);
 	return (cmdpath);
 }

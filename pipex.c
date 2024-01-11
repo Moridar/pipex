@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:38:30 by bsyvasal          #+#    #+#             */
-/*   Updated: 2023/12/13 15:32:27 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2024/01/11 14:48:35 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	exec(int i, t_pipe *data, int fd[])
 
 	pid = fork();
 	if (pid == -1)
-		errorexit("fork");
+		errormsg("fork", 1);
 	if (pid == 0)
 	{
 		args = make_args(data->argv[i]);
@@ -46,7 +46,7 @@ static void	fileexec(int i, t_pipe *data, int last)
 	{
 		file = open(data->argv[i + 1], O_WRONLY | O_TRUNC | O_CREAT, 00644);
 		if (file < 0)
-			errorexit("outfile error");
+			errormsg(data->argv[i + 1], 1);
 		newfd[0] = data->fd[0];
 		newfd[1] = file;
 		newfd[2] = data->fd[1];
@@ -55,7 +55,7 @@ static void	fileexec(int i, t_pipe *data, int last)
 	{
 		file = open(data->argv[i - 1], O_RDONLY);
 		if (file < 0)
-			return (perror("infile error"));
+			return (errormsg(data->argv[i - 1], 0));
 		newfd[0] = file;
 		newfd[1] = data->fd[1];
 		newfd[2] = data->fd[0];
@@ -74,11 +74,12 @@ int	main(int argc, char *argv[], char *envp[])
 	data.envp = envp;
 	data.status = 0;
 	data.pid[0] = 0;
-	while (*envp && ft_strncmp(*envp, "PATH=", 5))
+	while (envp && *envp && ft_strncmp(*envp, "PATH=", 5))
 		envp++;
-	data.paths = ft_split((*envp) + 5, ':');
+	if (envp && *envp)
+		data.paths = ft_split((*envp) + 5, ':');
 	if (pipe(data.fd) == -1)
-		errorexit("pipe");
+		errormsg("pipe", 1);
 	fileexec(2, &data, 0);
 	fileexec(3, &data, 1);
 	close(data.fd[1]);
