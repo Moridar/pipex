@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 10:33:37 by bsyvasal          #+#    #+#             */
-/*   Updated: 2024/01/11 14:48:32 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2024/01/12 14:37:36 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,13 @@ void	freeall(char **strarray)
 {
 	int	i;
 
-	i = -1;
-	while (strarray[++i])
-		free(strarray[i]);
-	free(strarray);
+	if (strarray)
+	{
+		i = -1;
+		while (strarray[++i])
+			free(strarray[i]);
+		free(strarray);
+	}
 }
 
 void	errormsg(char *msg, int exits)
