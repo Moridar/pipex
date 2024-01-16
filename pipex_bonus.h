@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 13:59:48 by bsyvasal          #+#    #+#             */
-/*   Updated: 2024/01/11 13:46:18 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2024/01/16 13:31:16 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "libft/libft.h"
 # include <stdio.h>
 # include <fcntl.h>
+# include <errno.h>
 
 typedef struct s_pipe
 {
@@ -28,7 +29,6 @@ typedef struct s_pipe
 }	t_pipe;
 
 void	freeall(char **strarray);
-void	errormsg(char *msg, int exits);
 char	**make_args(char *arg);
 char	*ft_getpath(char *cmd, char **paths);
 #endif

@@ -6,11 +6,20 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:38:30 by bsyvasal          #+#    #+#             */
-/*   Updated: 2024/01/12 14:06:51 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2024/01/16 15:22:41 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+static void	errormsg(char *msg, int exits)
+{
+	msg = ft_strjoin("pipex: ", msg);
+	perror(msg);
+	free(msg);
+	if (exits)
+		exit(errno);
+}
 
 static void	exec(int i, t_pipe *data, int fd[])
 {

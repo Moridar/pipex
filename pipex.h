@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 13:59:48 by bsyvasal          #+#    #+#             */
-/*   Updated: 2024/01/11 14:13:07 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2024/01/16 13:31:21 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ typedef struct s_pipe
 }	t_pipe;
 
 void	freeall(char **strarray);
-void	errormsg(char *msg, int exits);
 char	**make_args(char *arg);
 char	*ft_getpath(char *cmd, char **paths);
 #endif

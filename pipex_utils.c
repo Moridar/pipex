@@ -6,7 +6,7 @@
 /*   By: bsyvasal <bsyvasal@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 10:33:37 by bsyvasal          #+#    #+#             */
-/*   Updated: 2024/01/12 14:37:36 by bsyvasal         ###   ########.fr       */
+/*   Updated: 2024/01/16 15:22:23 by bsyvasal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,43 @@ void	freeall(char **strarray)
 	}
 }
 
-void	errormsg(char *msg, int exits)
+char	*remove_quote(char *arg, char c)
 {
-	msg = ft_strjoin("pipex: ", msg);
-	perror(msg);
-	free(msg);
-	if (exits)
-		exit(errno);
+	char	*str;
+	char	*strend;
+	int		i;
+
+	str = ft_strchr(arg, c) + 1;
+	strend = str;
+	i = ft_strlen(str);
+	while (i >= 0)
+	{
+		if (str[i] == '\\')
+			str[i] = 32;
+		if (str[i - 1] == '\\')
+			i--;
+		i--;
+	}
+	while (1)
+	{
+		strend = ft_strchr(strend + 1, c);
+		if (!strend)
+			return (NULL);
+		if (*(strend - 1) != '\\')
+			break ;
+	}
+	*strend = 0;
+	return (str);
 }
 
 char	**make_args(char *arg)
 {
 	char	**args;
 	int		i;
-	char	*strend;
 	char	c;
 
+	if (access(arg, F_OK) == 0)
+		return (ft_split(arg, 0));
 	args = ft_split(arg, ' ');
 	if (!args)
 		exit(1);
@@ -50,9 +71,7 @@ char	**make_args(char *arg)
 	if (c)
 	{
 		free(args[1]);
-		args[1] = ft_strchr(arg, c) + 1;
-		strend = ft_strchr(args[1], c);
-		*strend = 0;
+		args[1] = remove_quote(arg, c);
 		i = 2;
 		while (args[i])
 			free(args[i++]);
